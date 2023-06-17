@@ -27,7 +27,41 @@
             </div>
         </div>
         <div class="card-body">
-            <p>{{$contract->name}}</p>
+            
+            <a href="{{route('contract.vendor-edit', $contract->id)}}" class="btn btn-primary btn-xs mb-3"><b>Contract Detail</b></a>
+            {{-- belum bisa --}}
+            <form action="{{route('contract.buyer-return', ['contract'=>$contract->pivot->contract_id,  'vendor'=>$contract->pivot->vendor_id])}}" method="POST">
+                @csrf
+                <button class="btn btn-danger btn-xs mb-3" type="submit">Contract Return</button>
+            </form>
+
+            {{-- <a href="" class="btn btn-danger btn-xs mb-3"><b>Contract Return</b></a> --}}
+
+            <div class="table-responsive">
+                <table id="pekerjaanTable" class="table table-sm table-hovered table-bordered table-hover table-striped datatable2">
+                    <thead>
+                        <tr>
+                            <th class="text-center pr-0" style="vertical-align: middle; width: 5%;">No.</th>
+                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Nomor Kontrak</th>
+                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Direktur</th>
+                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Kontak</th>
+                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Alamat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      
+                        <tr>
+                            {{-- <td class="text-center" style="vertical-align: middle;">{{$loop->iteration}}</td> --}}
+                            <td style="vertical-align: middle;">{{$contract->pivot->number}}</td>
+                            <td style="vertical-align: middle;">{{$contract->pivot->director}}</td>
+                            <td style="vertical-align: middle;">{{$contract->pivot->address}}</td>
+                            <td style="vertical-align: middle;">{{$contract->pivot->phone}}</td>
+                            </td>
+                        </tr>
+                  
+                    </tbody>
+                </table><br>
+            </div>
         </div>
     </div>
     <div class="card">
@@ -41,50 +75,17 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table id="pekerjaanTable" class="table table-sm table-hovered table-bordered table-hover table-striped datatable2">
-                    <thead>
-                        <tr>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 5%;">No.</th>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Nomor Kontrak</th>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Direktur</th>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Kontak</th>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Alamat</th>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 20%;">Status</th>
-                            <th class="text-center pr-0" style="vertical-align: middle; width: 10%;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($contracts as $contract)
-                        <tr>
-                            <td class="text-center" style="vertical-align: middle;">{{$loop->iteration}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->number}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->director}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->address}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->phone}}</td>
-                            <td>
-                                @if ($contract->pivot->status_id == 1)
-                                    <span class="badge badge-primary">Review By Vendor</span>
-                                @endif
-                                @if ($contract->pivot->status_id == 2)
-                                    <span class="badge badge-secondary">Submited By Vendor</span>
-                                @endif
-                                @if ($contract->pivot->status_id == 3)
-                                    <span class="badge badge-warning">Review By Buyer</span>
-                                @endif
-                                @if ($contract->pivot->status_id == 4)
-                                    <span class="badge badge-success">Review By Legal</span>
-                                @endif
-                            </td>
-                            
-                            <td class="text-center" style="vertical-align: middle;"> <a href="{{route('contract.buyer-detail', ['contract' => $contract->pivot->contract_id, 'vendor' => $contract->pivot->vendor_id])}}" class="btn btn-primary btn-xs"><b>Detail</b></a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table><br>
-            </div>
+            <embed src="{{asset('CEK.pdf')}}" width="100%" height="600px" type="application/pdf">
         </div>
+        {{-- belum bisa if yg sesuai status --}}
+        @if ($contract->pivot->status_id < 4)
+            <form action="{{route('contract.buyer-reviewLegal', ['contract'=>$contract->pivot->contract_id,  'vendor'=>$contract->pivot->vendor_id])}}" method="POST">
+                @csrf
+                <button class="btn btn-info btn-lg" type="submit">SUBMIT TO LEGAL REVIEW</button>
+            </form>
+        @else
+            <a type="button" class="btn btn-info btn-lg disabled">PROCESS REVIEW BY LEGAL</a>
+        @endif
     </div>
 </div>
 @endsection

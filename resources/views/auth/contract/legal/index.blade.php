@@ -27,20 +27,6 @@
             </div>
         </div>
         <div class="card-body">
-            <p>{{$contract->name}}</p>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header card-forestgreen">
-            <h6 class="card-title pt-1">Kontrak</h6>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool btn-xs pr-0" data-card-widget="maximize"><i class="fas fa-expand fa-xs icon-border-default"></i>
-                </button>
-                <button type="button" class="btn btn-tool btn-xs" data-card-widget="collapse"><i class="fas fa-minus fa-xs icon-border-yellow"></i>
-                </button>
-            </div>
-        </div>
-        <div class="card-body">
             <div class="table-responsive">
                 <table id="pekerjaanTable" class="table table-sm table-hovered table-bordered table-hover table-striped datatable2">
                     <thead>
@@ -58,27 +44,27 @@
                         @foreach($contracts as $contract)
                         <tr>
                             <td class="text-center" style="vertical-align: middle;">{{$loop->iteration}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->number}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->director}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->address}}</td>
-                            <td style="vertical-align: middle;">{{$contract->pivot->phone}}</td>
+                            <td style="vertical-align: middle;">{{$contract->number}}</td>
+                            <td style="vertical-align: middle;">{{$contract->director}}</td>
+                            <td style="vertical-align: middle;">{{$contract->address}}</td>
+                            <td style="vertical-align: middle;">{{$contract->phone}}</td>
                             <td>
-                                @if ($contract->pivot->status_id == 1)
+                                @if ($contract->status_id == 1)
                                     <span class="badge badge-primary">Review By Vendor</span>
                                 @endif
-                                @if ($contract->pivot->status_id == 2)
+                                @if ($contract->status_id == 2)
                                     <span class="badge badge-secondary">Submited By Vendor</span>
                                 @endif
-                                @if ($contract->pivot->status_id == 3)
+                                @if ($contract->status_id == 3)
                                     <span class="badge badge-warning">Review By Buyer</span>
                                 @endif
-                                @if ($contract->pivot->status_id == 4)
+                                @if ($contract->status_id == 4)
                                     <span class="badge badge-success">Review By Legal</span>
                                 @endif
                             </td>
                             
-                            <td class="text-center" style="vertical-align: middle;"> <a href="{{route('contract.buyer-detail', ['contract' => $contract->pivot->contract_id, 'vendor' => $contract->pivot->vendor_id])}}" class="btn btn-primary btn-xs"><b>Detail</b></a>
-                            </td>
+                            {{-- <td class="text-center" style="vertical-align: middle;"> <a href="{{route('contract.buyer-detail', ['contract' => $contract->pivot->contract_id, 'vendor' => $contract->pivot->vendor_id])}}" class="btn btn-primary btn-xs"><b>Detail</b></a>
+                            </td> --}}
                         </tr>
                         @endforeach
                     </tbody>

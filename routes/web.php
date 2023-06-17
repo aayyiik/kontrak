@@ -22,6 +22,7 @@ Route::get('/', function () {
 
 // Login
 Route::post('/login', [LoginController::class, "authenticate"])->name('logon');
+Route::get('/logout', [LoginController::class, "logout"])->name('logout');
 
 // Dashboard
 Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
@@ -29,6 +30,10 @@ Route::get('/home', [DashboardController::class, 'index'])->name('dashboard');
 // Buyer Contract
 Route::get('/contract/buyer', [ContractController::class, 'getBuyerContract'])->name('contract.buyer');
 Route::get('/contract/{contract}/buyer', [ContractController::class, 'showBuyer'])->name('contract.buyer-show');
+Route::get('/contract/detail/{contract}/vendor/{vendor}', [ContractController::class, 'detailBuyer'])->name('contract.buyer-detail');
+Route::post('/contract/detail/{contract}/vendor/{vendor}/return', [ContractController::class, 'return'])->name('contract.buyer-return');
+Route::post('/contract/detail/{contract}/vendor/{vendor}/review', [ContractController::class, 'reviewLegal'])->name('contract.buyer-reviewLegal');
+
 
 // Vendor Contract
 Route::get('/contract/vendor', [ContractController::class, 'getVendorContract'])->name('contract.vendor');
@@ -36,4 +41,7 @@ Route::get('/contract/{contract}/vendor', [ContractController::class, 'showVendo
 Route::get('/contract/{contract}/edit', [ContractController::class, 'editContractDetail'])->name('contract.vendor-edit');
 Route::put('/contract/{contract}/update', [ContractController::class, 'updateContractDetail'])->name('contract.vendor-update');
 
+
+//Legal Contract
+Route::get('/contract/legal', [ContractController::class, 'getLegalContract'])->name('contract.legal');
 

@@ -60,12 +60,15 @@
                         {{Auth::user()->name}}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
+                        <li>
+                            <a href="/logout">Logout</a>
+                        </li>
+                        
                     </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                        <i class="fas fa-expand-arrows-alt"></i>
+                        <i class="fas fa-expand-arrows-alt"></i> Logout
                     </a>
                 </li>
             </ul>
@@ -109,6 +112,17 @@
                                 <i class="nav-icon fas fa-chart-line fa-xs"></i>
                                 <p>
                                     Contract Vendor
+                                </p>
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(Auth::user()->userDetail->role->role == "Legal")
+                        <li class="nav-item">
+                            <a href="{{route('contract.legal')}}" class="nav-link @yield('active-contract')">
+                                <i class="nav-icon fas fa-chart-line fa-xs"></i>
+                                <p>
+                                    Contract Legal
                                 </p>
                             </a>
                         </li>

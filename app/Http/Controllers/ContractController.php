@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contract;
+use App\Models\ContractDetail;
+use App\Models\ContractVendor;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,6 +12,9 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class ContractController extends Controller
 {
+
+    //contract buyer
+
     public function getBuyerContract()
     {
         $user_id = Auth::id();
@@ -47,8 +52,74 @@ class ContractController extends Controller
     {
         $contracts = Contract::find($contract->id)->vendors()->get();
 
+
         return view('auth.contract.buyer.show', compact('contract', 'contracts'));
     }
+
+    public function detailBuyer(Contract $contract, Vendor $vendor)
+    {      
+   
+        $contract = $contract->vendors()->where('vendor_id', $vendor->id)->first();
+
+        return view ('auth.contract.buyer.detail', compact('contract'));
+    }
+
+    public function return(Contract $contract, Vendor $vendor)
+    
+    {
+        $contracts = $contract->vendors()->where('vendor', $vendor->id);
+
+        $contract->vendors()->updateExistingPivot($vendor->id, [
+            'status_id' => 1,
+        ]);
+
+        return redirect()->back();
+
+    }
+
+    // public function updateStatus($id_lapor){
+    //     $lapor = Pelaporan::find($id_lapor);
+    //     $lapor->status = 1;
+    //     $lapor->save();
+    //     return redirect('/pelaporan');
+    // }
+
+
+    public function reviewLegal(Contract $contract, Vendor $vendor){
+        $contracts = $contract->vendors()->where('vendor', $vendor->id);
+
+        $contract->vendors()->updateExistingPivot($vendor->id, [
+            'status_id' => 4,
+        ]);
+
+        return redirect()->back();
+
+    }
+
+
+
+
+    // contract legal
+
+    public function getLegalContract(){
+        $user_id = Auth::id();
+        $contracts = ContractVendor::where('status_id', 4)->get();
+
+
+        return view('auth.contract.legal.index', compact('user_id','contracts'));
+    }
+
+    public function returnLegal(Contract $contract, Vendor $vendor){
+        $contracts = $contract->vendor()->where('vendor', $vendor->id);
+
+        $contract->vendors()->update($contract->id, [
+            'status_id' => 3,
+        ]);
+
+        return redirect()->back();
+
+    }  
+    // contract vendor
 
     public function showVendor(Contract $contract)
     {
@@ -117,7 +188,7 @@ class ContractController extends Controller
         $work = Contract::find($contract->id);
 
         $work->vendors()->updateExistingPivot($vendor->id, [
-            'status_id' => 1,
+            'status_id' => 2,
             'number' => $request->number,
             'director' => $request->director,
             'phone' => $request->phone,
@@ -125,7 +196,8 @@ class ContractController extends Controller
             'filename' => $fileName,
         ]);
 
-        return redirect()->back();
+        // return redirect()->back();
+        return redirect('contract/vendor');
     }
 
     /**
