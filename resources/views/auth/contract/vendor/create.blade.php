@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="row justify-content-end mr-0">
-                    <button type="submit" class="btn btn-success btn-xs text-right" data-toggle="confirmation" data-placement="left">Simpan</button>
+                    <button type="submit" class="btn btn-success btn-xs text-right" data-toggle="confirmation" data-placement="left">Save</button>
                 </div>
             </form>
         </div>

@@ -62,7 +62,8 @@
                                     <span class="badge badge-success">Review By Legal</span>
                                 @endif
                             </td>
-                            
+                            <td class="text-center" style="vertical-align: middle;"> <a href="{{route('contract.legal-show', $contract->id)}}" class="btn btn-primary btn-xs"><b>Detail</b></a>
+
                             {{-- <td class="text-center" style="vertical-align: middle;"> <a href="{{route('contract.buyer-detail', ['contract' => $contract->pivot->contract_id, 'vendor' => $contract->pivot->vendor_id])}}" class="btn btn-primary btn-xs"><b>Detail</b></a>
                             </td> --}}
                         </tr>

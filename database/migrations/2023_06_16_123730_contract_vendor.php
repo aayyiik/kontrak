@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('contract_id');
             $table->unsignedBigInteger('status_id');
             $table->unsignedBigInteger('vendor_id');
+            $table->unsignedBigInteger('review_id')->nullable();
             $table->string('number');
             $table->string('director');
             $table->string('address');
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->foreign('vendor_id')->references('id')->on('vendors');
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('contract_id')->references('id')->on('contracts');
+            $table->foreign('review_id')->references('id')->on('review_legals');
             $table->timestamps();
         });
     }

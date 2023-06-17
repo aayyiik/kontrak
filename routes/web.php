@@ -44,4 +44,8 @@ Route::put('/contract/{contract}/update', [ContractController::class, 'updateCon
 
 //Legal Contract
 Route::get('/contract/legal', [ContractController::class, 'getLegalContract'])->name('contract.legal');
+Route::get('/contract/{contract}/legal', [ContractController::class, 'showLegal'])->name('contract.legal-show');
+Route::post('/contract/{contract}/legal/approval', [ContractController::class, 'approvalLegal'])->name('contract.legal-approval');
+
+
 

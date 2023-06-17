@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contract;
 use App\Models\ContractDetail;
 use App\Models\ContractVendor;
+use App\Models\ReviewLegal;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -109,6 +110,46 @@ class ContractController extends Controller
         return view('auth.contract.legal.index', compact('user_id','contracts'));
     }
 
+    //masih kurang yakin tappi bisa masuk. untuk id 3 not founf
+    public function showLegal(Contract $contract)
+    {
+        $contracts = ContractVendor::find($contract->id);
+
+        return view('auth.contract.legal.show', compact('contracts'));
+    }
+
+    public function approvalLegal(Request $request, Contract $contract, Vendor $vendor)
+    {
+         // Validasi data yang diterima dari request
+        $validatedData = $request->validate([
+            'contract_id' => 'required',
+            'user_id' => 'required',
+            'status_id' => 'required',
+            'vendor_id' => 'required',
+            'review_contract' => 'required',
+        ]);
+
+       
+
+        // Buat instance model untuk data baru
+        // $reviews = new ReviewLegal();
+        // $reviews->contract_id = $request->contract_id;
+        // $reviews->user_id = Auth()->id;
+        // $reviews->vendor_id = $request->vendor_id;
+        // $reviews->review_contract = $request->review_contract;
+        // $reviews->status_id = 5;
+
+        dd($request->all());
+        // // ... set nilai untuk kolom lainnya
+
+        // // Simpan data ke database
+        // $reviews->save();
+
+        // // Redirect atau berikan respon sesuai kebutuhan
+        // return redirect()->route('contract/legal');
+
+    }
+
     public function returnLegal(Contract $contract, Vendor $vendor){
         $contracts = $contract->vendor()->where('vendor', $vendor->id);
 
@@ -119,6 +160,10 @@ class ContractController extends Controller
         return redirect()->back();
 
     }  
+
+
+ 
+
     // contract vendor
 
     public function showVendor(Contract $contract)
