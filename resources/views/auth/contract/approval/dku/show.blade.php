@@ -82,7 +82,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{ route('contract.avp-approval', ['contract' => $contracts->id]) }}" method="POST">
+                <form action="{{ route('contract.dku-approval', ['contract' => $contracts->id]) }}" method="POST">
                     @csrf
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status_id" id="exampleRadios1" value="7" checked>
