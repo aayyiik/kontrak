@@ -78,13 +78,6 @@ class ContractController extends Controller
 
     }
 
-    // public function updateStatus($id_lapor){
-    //     $lapor = Pelaporan::find($id_lapor);
-    //     $lapor->status = 1;
-    //     $lapor->save();
-    //     return redirect('/pelaporan');
-    // }
-
 
     public function reviewLegal(Contract $contract, Vendor $vendor){
         $contracts = $contract->vendors()->where('vendor', $vendor->id);
@@ -96,8 +89,6 @@ class ContractController extends Controller
         return redirect()->back();
 
     }
-
-
 
 
     // contract legal
@@ -118,48 +109,41 @@ class ContractController extends Controller
         return view('auth.contract.legal.show', compact('contracts'));
     }
 
-    public function approvalLegal(Request $request, Contract $contract, Vendor $vendor)
+
+
+    public function storeReview(Request $request, Contract $contract, Vendor $vendor)
     {
-         // Validasi data yang diterima dari request
-        $validatedData = $request->validate([
-            'contract_id' => 'required',
-            'user_id' => 'required',
-            'status_id' => 'required',
-            'vendor_id' => 'required',
-            'review_contract' => 'required',
-        ]);
 
-       
+        // $contracts = ContractVendor::find($contract->id);
+        // $vendors = $contract->vendors()->where('vendor', $vendor->id)->get();
 
-        // Buat instance model untuk data baru
         // $reviews = new ReviewLegal();
-        // $reviews->contract_id = $request->contract_id;
-        // $reviews->user_id = Auth()->id;
-        // $reviews->vendor_id = $request->vendor_id;
+        // $reviews->contract_id = $contracts;
+        // $reviews->user_id = Auth()->id();
+        // $reviews->status_id = $request->status_id;
+        // $reviews->vendor_id = $vendors;
         // $reviews->review_contract = $request->review_contract;
-        // $reviews->status_id = 5;
-
-        dd($request->all());
-        // // ... set nilai untuk kolom lainnya
-
         // // Simpan data ke database
         // $reviews->save();
 
-        // // Redirect atau berikan respon sesuai kebutuhan
-        // return redirect()->route('contract/legal');
+        // dd($reviews);
+        // dd($vendor);
+        $reviews = ReviewLegal::create([
+            'contract_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'vendor_id' => $vendor->id,
+            'review_contract' => $request->review_contract,
+        ]);
 
-        
-    }
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)->where('vendor_id', $vendor->id)
+            ->update([
+            'status_id' => $request->status_id,
+            'review_id' => $reviews->id,
+        ]); 
 
-    public function editLegal()
-    {
-     
-        // return redirect()->back();
-        return view('auth.contract.legal.review');
-    }
-
-    public function storeReview(Request $request, Contract $contract){
-        dd($request->all());
+        // dd($reviews,$contractvendor);
+        return redirect()->route('contract.legal-show', $contract->id );
 
     }
 

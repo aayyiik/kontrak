@@ -17,4 +17,9 @@ class ContractVendor extends Model
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
+
+    public function review()
+    {
+        return $this->belongsTo(ReviewLegal::class, 'review_id');
+    }
 }

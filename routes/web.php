@@ -45,7 +45,7 @@ Route::put('/contract/{contract}/update', [ContractController::class, 'updateCon
 //Legal Contract
 Route::get('/contract/legal', [ContractController::class, 'getLegalContract'])->name('contract.legal');
 Route::get('/contract/{contract}/legal', [ContractController::class, 'showLegal'])->name('contract.legal-show');
-Route::post('/contract/{contract}/approval', [ContractController::class, 'storeReview'])->name('contract.legal-approval');
+Route::post('/contract/{contract}/{vendor}/approval', [ContractController::class, 'storeReview'])->name('contract.legal-approval');
 Route::get('/contract/{contract}/legal/edit', [ContractController::class, 'editLegal'])->name('contract.legal-edit');
 
 
