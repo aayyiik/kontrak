@@ -55,6 +55,7 @@
                         </tbody>
                     </table><br>
                 </div>
+                <a href="{{route('contract.legal-edit', $contracts->id)}}" class="btn btn-primary btn-xs mb-3"><b>Contract Review</b></a>
             </div>
         </div>
         <div class="card">
@@ -82,19 +83,18 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{{route('contract.legal-approval', $contracts->id)}}" method="post">
-                @csrf
-                @method('post')
+                <form action="{{ route('contract.legal-approval', $contracts->id) }}" method="POST">
+                    @csrf
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status_id" id="exampleRadios1" value="5" checked>
                         <label class="form-check-label" for="exampleRadios1">
-                        Accept
+                            Accept
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="status_id" id="exampleRadios2" value="3">
                         <label class="form-check-label" for="exampleRadios2">
-                        Reject
+                            Reject
                         </label>
                     </div>
                     <div class="form-group shadow-textarea">
@@ -103,9 +103,10 @@
                     </div>
                     <div class="row justify-content-end mr-0">
                         <button type="submit" class="btn btn-success btn-xs text-right" data-toggle="confirmation" data-placement="left">Save</button>
+                        {{-- <a class="btn btn-primary" href="" role="submit">Link</a> --}}
                     </div>
                 </form>
-            </div>
+            </div>            
         </div>
     </div>
 @endsection

@@ -64,6 +64,40 @@
             </div>
         </div>
     </div>
+
+    @if ($contract->pivot->status_id == 5)
+    <div class="card">
+        <div class="card-header card-forestgreen">
+            <h6 class="card-title pt-1">LEGAL REVIEW</h6>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool btn-xs pr-0" data-card-widget="maximize"><i class="fas fa-expand fa-xs icon-border-default"></i>
+                </button>
+                <button type="button" class="btn btn-tool btn-xs" data-card-widget="collapse"><i class="fas fa-minus fa-xs icon-border-yellow"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Review</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>{{$contract->name}}</td>
+                        <td>{{$contract->created_at}}</td>
+                        <td>{{@$contract->review_contract}}</td>
+                    </tbody>
+                  </table>
+        </div>            
+    </div>
+    @endif
+
     <div class="card">
         <div class="card-header card-forestgreen">
             <h6 class="card-title pt-1">Kontrak</h6>
@@ -83,10 +117,15 @@
                 @csrf
                 <button class="btn btn-info btn-lg" type="submit">SUBMIT TO LEGAL REVIEW</button>
             </form>
-        @else
+        @elseif ($contract->pivot->status_id == 4)
             <a type="button" class="btn btn-info btn-lg disabled">PROCESS REVIEW BY LEGAL</a>
+        @elseif ($contract->pivot->status_id == 5)
+            <a type="button" class="btn btn-info btn-lg">SUBMIT TO KABAG</a>
+        @elseif ($contract->pivot->status_id == 6)
+            <a type="button" class="btn btn-info btn-lg">SUBMIT TO KABAG</a>
         @endif
     </div>
+    
 </div>
 @endsection
 @push('script')

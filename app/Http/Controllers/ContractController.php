@@ -148,6 +148,19 @@ class ContractController extends Controller
         // // Redirect atau berikan respon sesuai kebutuhan
         // return redirect()->route('contract/legal');
 
+        
+    }
+
+    public function editLegal()
+    {
+     
+        // return redirect()->back();
+        return view('auth.contract.legal.review');
+    }
+
+    public function storeReview(Request $request, Contract $contract){
+        dd($request->all());
+
     }
 
     public function returnLegal(Contract $contract, Vendor $vendor){

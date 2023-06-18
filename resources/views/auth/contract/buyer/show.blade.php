@@ -65,15 +65,17 @@
                             <td>
                                 @if ($contract->pivot->status_id == 1)
                                     <span class="badge badge-primary">Review By Vendor</span>
-                                @endif
-                                @if ($contract->pivot->status_id == 2)
+                                @elseif ($contract->pivot->status_id == 2)
                                     <span class="badge badge-secondary">Submited By Vendor</span>
-                                @endif
-                                @if ($contract->pivot->status_id == 3)
+                                
+                                @elseif ($contract->pivot->status_id == 3)
                                     <span class="badge badge-warning">Review By Buyer</span>
-                                @endif
-                                @if ($contract->pivot->status_id == 4)
+                                
+                                @elseif ($contract->pivot->status_id == 4)
                                     <span class="badge badge-success">Review By Legal</span>
+                                
+                                @elseif ($contract->pivot->status_id == 5)
+                                    <span class="badge badge-success">Submited By Legal</span>
                                 @endif
                             </td>
                             
@@ -86,6 +88,7 @@
             </div>
         </div>
     </div>
+
 </div>
 @endsection
 @push('script')
