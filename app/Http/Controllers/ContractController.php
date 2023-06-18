@@ -182,8 +182,6 @@ class ContractController extends Controller
 
     public function storeReviewAVP(Request $request, ContractVendor $contract)
     {
-
-      
         // dd($vendor);
         $approvals = HistoryApproval::create([
             'contractvendor_id' => $contract->id,
@@ -201,6 +199,16 @@ class ContractController extends Controller
         // dd($reviews,$contractvendor);
         return redirect()->route('contract.avp-show', $contract->id );
 
+    }
+
+    public function storeReviewApproval(Request $request, ContractVendor $contract)
+    {
+        $approvals = HistoryApproval::create([
+            'contractvendor_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'notes' => $request->notes,
+        ]);
     }
 
 

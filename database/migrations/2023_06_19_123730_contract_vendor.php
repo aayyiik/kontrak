@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('phone');
             $table->string('filename');
+            $table->decimal('nilai_kontrak',10,2); 
             $table->foreign('vendor_id')->references('id')->on('vendors');
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('contract_id')->references('id')->on('contracts');
