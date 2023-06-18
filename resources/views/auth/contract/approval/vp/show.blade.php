@@ -85,7 +85,7 @@
                 <form action="{{ route('contract.avp-approval', ['contract' => $contracts->id]) }}" method="POST">
                     @csrf
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="status_id" id="exampleRadios1" value="7" checked>
+                        <input class="form-check-input" type="radio" name="status_id" id="exampleRadios1" value="9">
                         <label class="form-check-label" for="exampleRadios1">
                             Accept
                         </label>

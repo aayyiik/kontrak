@@ -62,11 +62,11 @@
                                 @elseif ($contract->status_id == 6)
                                     <span class="badge badge-success">Review By Kabag</span>
                                 @elseif ($contract->status_id == 7)
-                                    <span class="badge badge-success">Review By Manager</span>
+                                    <span class="badge badge-success">Approved By Kabag</span>
                                 @elseif ($contract->status_id == 8)
-                                    <span class="badge badge-success">Review By General Manager</span>
+                                    <span class="badge badge-success">Review By Manager</span>
                                 @elseif ($contract->status_id == 9)
-                                    <span class="badge badge-success">Review By DKU</span>
+                                    <span class="badge badge-success">Approved By Manager</span>
                                 @endif
                             </td>
                             <td class="text-center" style="vertical-align: middle;"> <a href="{{route('contract.vp-show', $contract->id)}}" class="btn btn-primary btn-xs"><b>Detail</b></a>

@@ -53,6 +53,7 @@ Route::post('/contract/{contract}/{vendor}/approval', [ContractController::class
 Route::get('/contract/avp', [ContractController::class, 'getAvpContract'])->name('contract.avp');
 Route::get('/contract/{contract}/avp', [ContractController::class, 'showAVP'])->name('contract.avp-show');
 Route::post('/contract/{contract}/approval/avp', [ContractController::class, 'storeReviewAVP'])->name('contract.avp-approval');
+// Route::post('/contract/{contract}/approval/avp', [ContractController::class, 'filterByPrice'])->name('contract.avp-approval');
 
 //VP
 Route::get('/contract/vp', [ContractController::class, 'getVpContract'])->name('contract.vp');
