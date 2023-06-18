@@ -33,6 +33,7 @@ Route::get('/contract/{contract}/buyer', [ContractController::class, 'showBuyer'
 Route::get('/contract/detail/{contract}/vendor/{vendor}', [ContractController::class, 'detailBuyer'])->name('contract.buyer-detail');
 Route::post('/contract/detail/{contract}/vendor/{vendor}/return', [ContractController::class, 'return'])->name('contract.buyer-return');
 Route::post('/contract/detail/{contract}/vendor/{vendor}/review', [ContractController::class, 'reviewLegal'])->name('contract.buyer-reviewLegal');
+Route::post('/contract/detail/{contract}/vendor/{vendor}/reviewAVP', [ContractController::class, 'reviewAVP'])->name('contract.buyer-reviewAVP');
 
 
 // Vendor Contract
@@ -46,7 +47,10 @@ Route::put('/contract/{contract}/update', [ContractController::class, 'updateCon
 Route::get('/contract/legal', [ContractController::class, 'getLegalContract'])->name('contract.legal');
 Route::get('/contract/{contract}/legal', [ContractController::class, 'showLegal'])->name('contract.legal-show');
 Route::post('/contract/{contract}/{vendor}/approval', [ContractController::class, 'storeReview'])->name('contract.legal-approval');
-Route::get('/contract/{contract}/legal/edit', [ContractController::class, 'editLegal'])->name('contract.legal-edit');
+
+//Approval Contract
+//AVP
+Route::get('/contract/avp', [ContractController::class, 'getAvpContract'])->name('contract.avp');
 
 
 

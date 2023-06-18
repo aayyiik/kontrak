@@ -61,8 +61,9 @@ class ContractController extends Controller
     {      
    
         $contract = $contract->vendors()->where('vendor_id', $vendor->id)->first();
+        $reviews = ReviewLegal::where('contract',$contract->id)->where('vendor',$vendor->id);
 
-        return view ('auth.contract.buyer.detail', compact('contract'));
+        return view ('auth.contract.buyer.detail', compact('contract', 'reviews'));
     }
 
     public function return(Contract $contract, Vendor $vendor)
@@ -84,6 +85,17 @@ class ContractController extends Controller
 
         $contract->vendors()->updateExistingPivot($vendor->id, [
             'status_id' => 4,
+        ]);
+
+        return redirect()->back();
+
+    }
+
+    public function reviewAVP(Contract $contract, Vendor $vendor){
+        $contracts = $contract->vendors()->where('vendor', $vendor->id);
+
+        $contract->vendors()->updateExistingPivot($vendor->id, [
+            'status_id' => 6,
         ]);
 
         return redirect()->back();
@@ -114,18 +126,6 @@ class ContractController extends Controller
     public function storeReview(Request $request, Contract $contract, Vendor $vendor)
     {
 
-        // $contracts = ContractVendor::find($contract->id);
-        // $vendors = $contract->vendors()->where('vendor', $vendor->id)->get();
-
-        // $reviews = new ReviewLegal();
-        // $reviews->contract_id = $contracts;
-        // $reviews->user_id = Auth()->id();
-        // $reviews->status_id = $request->status_id;
-        // $reviews->vendor_id = $vendors;
-        // $reviews->review_contract = $request->review_contract;
-        // // Simpan data ke database
-        // $reviews->save();
-
         // dd($reviews);
         // dd($vendor);
         $reviews = ReviewLegal::create([
@@ -147,19 +147,30 @@ class ContractController extends Controller
 
     }
 
-    public function returnLegal(Contract $contract, Vendor $vendor){
-        $contracts = $contract->vendor()->where('vendor', $vendor->id);
-
-        $contract->vendors()->update($contract->id, [
-            'status_id' => 3,
-        ]);
-
-        return redirect()->back();
-
-    }  
 
 
- 
+//ini kalau ga salah ga jadi
+    // public function returnLegal(Contract $contract, Vendor $vendor){
+    //     $contracts = $contract->vendor()->where('vendor', $vendor->id);
+
+    //     $contract->vendors()->update($contract->id, [
+    //         'status_id' => 3,
+    //     ]);
+
+    //     return redirect()->back();
+
+    // }  
+
+
+    // contract avp
+    
+    public function getAvpContract(){
+        $user_id = Auth::id();
+        $contracts = ContractVendor::where('status_id', 6)->get();
+
+
+        return view('auth.contract.approval.avp.index', compact('user_id','contracts'));
+    }
 
     // contract vendor
 

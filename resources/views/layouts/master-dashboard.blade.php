@@ -127,6 +127,17 @@
                             </a>
                         </li>
                         @endif
+
+                        @if(Auth::user()->userDetail->role->role == "Avp")
+                        <li class="nav-item">
+                            <a href="{{route('contract.avp')}}" class="nav-link @yield('active-contract')">
+                                <i class="nav-icon fas fa-chart-line fa-xs"></i>
+                                <p>
+                                    Contract AVP
+                                </p>
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
