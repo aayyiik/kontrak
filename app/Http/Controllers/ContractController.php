@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contract;
 use App\Models\ContractDetail;
 use App\Models\ContractVendor;
+use App\Models\HistoryApproval;
 use App\Models\ReviewLegal;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -171,6 +172,37 @@ class ContractController extends Controller
 
         return view('auth.contract.approval.avp.index', compact('user_id','contracts'));
     }
+
+    public function showAVP(Contract $contract)
+    {
+        $contracts = ContractVendor::find($contract->id);
+
+        return view('auth.contract.approval.avp.show', compact('contracts'));
+    }
+
+    public function storeReviewAVP(Request $request, ContractVendor $contract)
+    {
+
+      
+        // dd($vendor);
+        $approvals = HistoryApproval::create([
+            'contractvendor_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'notes' => $request->notes,
+        ]);
+
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+            ->update([
+            'status_id' => $request->status_id,
+        ]); 
+
+        // dd($approvals);
+        // dd($reviews,$contractvendor);
+        return redirect()->route('contract.avp-show', $contract->id );
+
+    }
+
 
     // contract vendor
 

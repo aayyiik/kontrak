@@ -76,6 +76,12 @@
                                 
                                 @elseif ($contract->pivot->status_id == 5)
                                     <span class="badge badge-success">Submited By Legal</span>
+
+                                @elseif ($contract->pivot->status_id == 6)
+                                    <span class="badge badge-success">Review By Kabag</span>
+
+                                @elseif ($contract->pivot->status_id == 7)
+                                    <span class="badge badge-success">Submited By Kabag</span>
                                 @endif
                             </td>
                             
