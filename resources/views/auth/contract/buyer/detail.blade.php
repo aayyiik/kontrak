@@ -161,6 +161,20 @@
             </form>
         @elseif ($contract->pivot->status_id == 6)
             <a type="button" class="btn btn-info btn-lg disabled">PROCESS REVIEW BY KABAG</a>
+        @elseif ($contract->pivot->status_id == 14)
+            <form action="{{route('contract.buyer-approvalVendor', ['contract'=>$contract->pivot->contract_id,  'vendor'=>$contract->pivot->vendor_id])}}" method="POST">
+                @csrf
+                <button class="btn btn-info btn-lg" type="submit">APPROVAL TO VENDOR</button>
+            </form>
+        @elseif ($contract->pivot->status_id == 15)
+            <a type="button" class="btn btn-info btn-lg disabled">PROCESSS APPROVAL BY VENDOR</a>    
+        @elseif ($contract->pivot->status_id == 16)
+            <form action="{{route('contract.buyer-approvalVendor', ['contract'=>$contract->pivot->contract_id,  'vendor'=>$contract->pivot->vendor_id])}}" method="POST">
+                @csrf
+                <button class="btn btn-info btn-lg" type="submit">APPROVAL TO BUYER</button>
+            </form>
+        @elseif ($contract->pivot->status_id == 17)
+            <a type="button" class="btn btn-info btn-lg disabled">PROCESS APPROVAL BY BUYER</a>    
         @endif
     </div>
     

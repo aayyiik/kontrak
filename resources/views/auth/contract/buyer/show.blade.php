@@ -81,7 +81,9 @@
                                     <span class="badge badge-success">Review By Kabag</span>
 
                                 @elseif ($contract->pivot->status_id == 7)
-                                    <span class="badge badge-success">Submited By Kabag</span>
+                                    <span class="badge badge-success">Approved By Kabag</span>
+                                @elseif ($contract->pivot->status_id == 14)
+                                    <span class="badge badge-success">COntract Approved</span>
                                 @endif
                             </td>
                             
