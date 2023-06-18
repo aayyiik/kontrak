@@ -183,6 +183,7 @@ class ContractController extends Controller
     public function storeReviewAVP(Request $request, ContractVendor $contract)
     {
         // dd($vendor);
+
         $approvals = HistoryApproval::create([
             'contractvendor_id' => $contract->id,
             'user_id' => Auth()->id(),
@@ -201,16 +202,157 @@ class ContractController extends Controller
 
     }
 
-    public function storeReviewApproval(Request $request, ContractVendor $contract)
+    public function filterByPrice(Request $request, ContractVendor $contract)
     {
+        // $approvals = HistoryApproval::create([
+        //     'contractvendor_id' => $contract->id,
+        //     'user_id' => Auth()->id(),
+        //     'status_id' => $request->status_id,
+        //     'notes' => $request->notes,
+        // ]);
+
+        //avp approval
         $approvals = HistoryApproval::create([
             'contractvendor_id' => $contract->id,
             'user_id' => Auth()->id(),
             'status_id' => $request->status_id,
             'notes' => $request->notes,
         ]);
+
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+            ->update([
+            'status_id' => $request->status_id,
+        ]); 
+        
+        if($price = ContractVendor::where('contract_price','<=', '100.000.000.00')){
+            //vp approval
+            $approvals = HistoryApproval::create([
+                'contractvendor_id' => $contract->id,
+                'user_id' => Auth()->id(),
+                'status_id' => 7,
+                'notes' => $request->notes,
+            ]);
+
+            $contractvendor = ContractVendor::where('contract_id', $contract->id)
+                ->update([
+                'status_id' => 7,
+            ]); 
+                if($price = ContractVendor::where('contract_price','>','100.000.000.00')->where('contract_price','<','500.000.000.00')){
+                    //svp approval
+                    $approvals = HistoryApproval::create([
+                        'contractvendor_id' => $contract->id,
+                        'user_id' => Auth()->id(),
+                        'status_id' => 8,
+                        'notes' => $request->notes,
+                    ]);
+        
+                    $contractvendor = ContractVendor::where('contract_id', $contract->id)
+                        ->update([
+                        'status_id' => 8,
+                    ]); 
+                    
+                    if($price = ContractVendor::where('contract_price','>=','500.000.000.00')){
+                        //approval dku
+                        $approvals = HistoryApproval::create([
+                            'contractvendor_id' => $contract->id,
+                            'user_id' => Auth()->id(),
+                            'status_id' => 9,
+                            'notes' => $request->notes,
+                        ]);
+            
+                        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+                            ->update([
+                            'status_id' => 9,
+                        ]); 
+                }
+            }
+        }
+       
     }
 
+    // contract vp
+    public function getVpContract(){
+        $user_id = Auth::id();
+        $contracts = ContractVendor::where('status_id', 7)->get();
+
+        return view('auth.contract.approval.vp.index', compact('user_id','contracts'));
+    }
+
+    public function showVP(Contract $contract)
+    {
+        $contracts = ContractVendor::find($contract->id);
+
+        return view('auth.contract.approval.vp.show', compact('contracts'));
+    }
+
+    public function storeReviewVP(Request $request, ContractVendor $contract)
+    {
+        // dd($vendor);
+
+        $approvals = HistoryApproval::create([
+            'contractvendor_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'notes' => $request->notes,
+        ]);
+
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+            ->update([
+            'status_id' => $request->status_id,
+        ]); 
+
+        // dd($approvals);
+        // dd($reviews,$contractvendor);
+        return redirect()->route('contract.avp-show', $contract->id );
+
+    }
+
+
+    // Ccontract svp
+    public function storeReviewSVP(Request $request, ContractVendor $contract)
+    {
+        // dd($vendor);
+
+        $approvals = HistoryApproval::create([
+            'contractvendor_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'notes' => $request->notes,
+        ]);
+
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+            ->update([
+            'status_id' => $request->status_id,
+        ]); 
+
+        // dd($approvals);
+        // dd($reviews,$contractvendor);
+        return redirect()->route('contract.avp-show', $contract->id );
+
+    }
+
+    //contract dku
+    public function storeReviewDKU(Request $request, ContractVendor $contract)
+    {
+        // dd($vendor);
+
+        $approvals = HistoryApproval::create([
+            'contractvendor_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'notes' => $request->notes,
+        ]);
+
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+            ->update([
+            'status_id' => $request->status_id,
+        ]); 
+
+        // dd($approvals);
+        // dd($reviews,$contractvendor);
+        return redirect()->route('contract.avp-show', $contract->id );
+
+    }
 
     // contract vendor
 
