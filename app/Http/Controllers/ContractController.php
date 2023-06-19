@@ -268,7 +268,7 @@ class ContractController extends Controller
         return view('auth.contract.approval.svp.index', compact('user_id','contracts'));
     }
 
-    public function showSvP(Contract $contract)
+    public function showSVP(Contract $contract)
     {
         $contracts = ContractVendor::find($contract->id);
 
@@ -278,7 +278,6 @@ class ContractController extends Controller
     public function storeReviewSVP(Request $request, ContractVendor $contract)
     {
         // dd($vendor);
-
         $approvals = HistoryApproval::create([
             'contractvendor_id' => $contract->id,
             'user_id' => Auth()->id(),
@@ -286,10 +285,19 @@ class ContractController extends Controller
             'notes' => $request->notes,
         ]);
 
-        $contractvendor = ContractVendor::where('contract_id', $contract->id)
+        if($price1 = ContractVendor::where('contract_price','>=','500000000.00')->first())
+        {
+            $contractvendor = ContractVendor::where('contract_id', $contract->id)
             ->update([
             'status_id' => $request->status_id,
         ]); 
+            $this->storeReviewSVP($request, $price1);
+        }else{
+            $contract->update([
+                'status_id' => 14,
+        ]); 
+
+        }
 
         // dd($approvals);
         // dd($reviews,$contractvendor);

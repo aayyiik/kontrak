@@ -60,4 +60,8 @@ Route::get('/contract/vp', [ContractController::class, 'getVpContract'])->name('
 Route::get('/contract/{contract}/vp', [ContractController::class, 'showVP'])->name('contract.vp-show');
 Route::post('/contract/{contract}/approval/vp', [ContractController::class, 'storeReviewVP'])->name('contract.vp-approval');
 
+//SVP
+Route::get('/contract/svp', [ContractController::class, 'getSvpContract'])->name('contract.svp');
+Route::get('/contract/{contract}/svp', [ContractController::class, 'showSVP'])->name('contract.svp-show');
+Route::post('/contract/{contract}/approval/svp', [ContractController::class, 'storeReviewSVP'])->name('contract.svp-approval');
 
