@@ -179,7 +179,7 @@ class ContractController extends Controller
         return view('auth.contract.approval.avp.show', compact('contracts'));
     }
 
-    public function storeReviewAVP2(Request $request, Contract $contract, Vendor $vendor)
+    public function storeReviewAVP(Request $request, Contract $contract, Vendor $vendor)
     {
         $approvals = HistoryApproval::create([
             'contract_id' => $contract->id,
@@ -189,16 +189,6 @@ class ContractController extends Controller
             'notes' => $request->notes,
             
         ]);
-        // dd($vendor);
-        // $contractvendor = ContractVendor::where('contract_id', $contract->id)->where('vendor_id', $vendor->id);  
-        // $contractprice = ContractVendor::where('contract_price',$contract->contract_price)->get();
-        // if ($price = ContractVendor::where($contractprice, '<=', '100000000.00')->get()) {
-        //     $contractvendor->status_id = 8;
-        //     $contractvendor->save();
-        //     $cv = ContractVendor::find($contractvendor);
-        //     // dd($contractvendor);
-        //     $this->storeReviewVP($request, $cv);
-        // }
 
         $contractvendor = ContractVendor::where('contract_id', $contract->id)->where('vendor_id', $vendor->id)->get();  
         if ($price = ContractVendor::where('contract_price',$contract->contract_price, '<=', '100000000.00')) {
@@ -211,29 +201,31 @@ class ContractController extends Controller
         // dd($approvals);      
         return redirect()->route('contract.avp-show', $contract->id);
     }
-    public function storeReviewAVP(Request $request, Contract $contract, Vendor $vendor)
-    {
-        $approvals = HistoryApproval::create([
-            'contract_id' => $contract->id,
-            'user_id' => Auth()->id(),
-            'status_id' => $request->status_id,
-            'vendor_id' => $vendor->id,
-            'notes' => $request->notes,
-        ]);
+
+
+    // public function storeReviewAVP(Request $request, Contract $contract, Vendor $vendor)
+    // {
+    //     $approvals = HistoryApproval::create([
+    //         'contract_id' => $contract->id,
+    //         'user_id' => Auth()->id(),
+    //         'status_id' => $request->status_id,
+    //         'vendor_id' => $vendor->id,
+    //         'notes' => $request->notes,
+    //     ]);
     
-        $contractVendors = ContractVendor::where('vendor_id', $contract->vendor_id)
-            ->where('contract_price', '<=', '100000000.00')
-            ->get();
+    //     $contractVendors = ContractVendor::where('vendor_id', $contract->vendor_id)
+    //         ->where('contract_price', '<=', '100000000.00')
+    //         ->get();
     
-        foreach ($contractVendors as $contractVendor) {
-            $contractVendor->status_id = 8;
-            $contractVendor->save();
+    //     foreach ($contractVendors as $contractVendor) {
+    //         $contractVendor->status_id = 8;
+    //         $contractVendor->save();
     
-            $this->storeReviewVP($request, $contractVendor);
-        }
+    //         $this->storeReviewVP($request, $contractVendor);
+    //     }
     
-        return redirect()->route('contract.avp-show', $contract->id);
-    }
+    //     return redirect()->route('contract.avp-show', $contract->id);
+    // }
 
     // dd($vendor);
     // $approvals = HistoryApproval::create([
