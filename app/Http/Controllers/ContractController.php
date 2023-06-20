@@ -59,16 +59,16 @@ class ContractController extends Controller
     }
 
     public function detailBuyer(Contract $contract, Vendor $vendor)
-    {      
-   
-        $contract = $contract->vendors()->where('vendor_id', $vendor->id)->first();
-        $reviews = ReviewLegal::where('contract',$contract->id)->where('vendor',$vendor->id);
+    {
 
-        return view ('auth.contract.buyer.detail', compact('contract', 'reviews'));
+        $contract = $contract->vendors()->where('vendor_id', $vendor->id)->first();
+        $reviews = ReviewLegal::where('contract', $contract->id)->where('vendor', $vendor->id);
+
+        return view('auth.contract.buyer.detail', compact('contract', 'reviews'));
     }
 
     public function return(Contract $contract, Vendor $vendor)
-    
+
     {
         $contracts = $contract->vendors()->where('vendor', $vendor->id);
 
@@ -77,11 +77,11 @@ class ContractController extends Controller
         ]);
 
         return redirect()->back();
-
     }
 
 
-    public function reviewLegal(Contract $contract, Vendor $vendor){
+    public function reviewLegal(Contract $contract, Vendor $vendor)
+    {
         $contracts = $contract->vendors()->where('vendor', $vendor->id);
 
         $contract->vendors()->updateExistingPivot($vendor->id, [
@@ -89,10 +89,10 @@ class ContractController extends Controller
         ]);
 
         return redirect()->back();
-
     }
 
-    public function reviewAVP(Contract $contract, Vendor $vendor){
+    public function reviewAVP(Contract $contract, Vendor $vendor)
+    {
         $contracts = $contract->vendors()->where('vendor', $vendor->id);
 
         $contract->vendors()->updateExistingPivot($vendor->id, [
@@ -100,18 +100,18 @@ class ContractController extends Controller
         ]);
 
         return redirect()->back();
-
     }
 
 
     // contract legal
 
-    public function getLegalContract(){
+    public function getLegalContract()
+    {
         $user_id = Auth::id();
         $contracts = ContractVendor::where('status_id', 4)->get();
 
 
-        return view('auth.contract.legal.index', compact('user_id','contracts'));
+        return view('auth.contract.legal.index', compact('user_id', 'contracts'));
     }
 
     //masih kurang yakin tappi bisa masuk. untuk id 3 not founf
@@ -126,7 +126,6 @@ class ContractController extends Controller
 
     public function storeReview(Request $request, Contract $contract, Vendor $vendor)
     {
-
         // dd($reviews);
         // dd($vendor);
         $reviews = ReviewLegal::create([
@@ -139,18 +138,17 @@ class ContractController extends Controller
 
         $contractvendor = ContractVendor::where('contract_id', $contract->id)->where('vendor_id', $vendor->id)
             ->update([
-            'status_id' => $request->status_id,
-            'review_id' => $reviews->id,
-        ]); 
+                'status_id' => $request->status_id,
+                'review_id' => $reviews->id,
+            ]);
 
         // dd($reviews,$contractvendor);
-        return redirect()->route('contract.legal-show', $contract->id );
-
+        return redirect()->route('contract.legal-show', $contract->id);
     }
 
 
 
-//ini kalau ga salah ga jadi
+    //ini kalau ga salah ga jadi
     // public function returnLegal(Contract $contract, Vendor $vendor){
     //     $contracts = $contract->vendor()->where('vendor', $vendor->id);
 
@@ -164,13 +162,14 @@ class ContractController extends Controller
 
 
     // contract avp
-    
-    public function getAvpContract(){
+
+    public function getAvpContract()
+    {
         $user_id = Auth::id();
         $contracts = ContractVendor::where('status_id', 6)->get();
 
 
-        return view('auth.contract.approval.avp.index', compact('user_id','contracts'));
+        return view('auth.contract.approval.avp.index', compact('user_id', 'contracts'));
     }
 
     public function showAVP(Contract $contract)
@@ -180,42 +179,94 @@ class ContractController extends Controller
         return view('auth.contract.approval.avp.show', compact('contracts'));
     }
 
-    public function storeReviewAVP(Request $request, ContractVendor $contract)
+    public function storeReviewAVP2(Request $request, Contract $contract, Vendor $vendor)
     {
-        // dd($vendor);
-
         $approvals = HistoryApproval::create([
-            'contractvendor_id' => $contract->id,
+            'contract_id' => $contract->id,
             'user_id' => Auth()->id(),
             'status_id' => $request->status_id,
+            'vendor_id' => $vendor->id,
+            'notes' => $request->notes,
+            
+        ]);
+        // dd($vendor);
+        // $contractvendor = ContractVendor::where('contract_id', $contract->id)->where('vendor_id', $vendor->id);  
+        // $contractprice = ContractVendor::where('contract_price',$contract->contract_price)->get();
+        // if ($price = ContractVendor::where($contractprice, '<=', '100000000.00')->get()) {
+        //     $contractvendor->status_id = 8;
+        //     $contractvendor->save();
+        //     $cv = ContractVendor::find($contractvendor);
+        //     // dd($contractvendor);
+        //     $this->storeReviewVP($request, $cv);
+        // }
+
+        $contractvendor = ContractVendor::where('contract_id', $contract->id)->where('vendor_id', $vendor->id)->get();  
+        if ($price = ContractVendor::where('contract_price',$contract->contract_price, '<=', '100000000.00')) {
+            $contractvendor->status_id = 8;
+            $contractvendor->save();
+            $cv = ContractVendor::find($contractvendor);
+            // dd($contractvendor);
+            $this->storeReviewVP($request, $cv);
+        }
+        // dd($approvals);      
+        return redirect()->route('contract.avp-show', $contract->id);
+    }
+    public function storeReviewAVP(Request $request, Contract $contract, Vendor $vendor)
+    {
+        $approvals = HistoryApproval::create([
+            'contract_id' => $contract->id,
+            'user_id' => Auth()->id(),
+            'status_id' => $request->status_id,
+            'vendor_id' => $vendor->id,
             'notes' => $request->notes,
         ]);
-
-
-
-        if($price1 = ContractVendor::where('contract_price','<=', '100000000.00')->first())
-        {
-            $contractvendor = ContractVendor::where('contract_id', $contract->id)
-            ->update([
-            'status_id' => $request->status_id,
-        ]); 
-            $this->storeReviewVP($request, $price1);
+    
+        $contractVendors = ContractVendor::where('vendor_id', $contract->vendor_id)
+            ->where('contract_price', '<=', '100000000.00')
+            ->get();
+    
+        foreach ($contractVendors as $contractVendor) {
+            $contractVendor->status_id = 8;
+            $contractVendor->save();
+    
+            $this->storeReviewVP($request, $contractVendor);
         }
-
-        // dd($approvals);
-        // dd($reviews,$contractvendor);
-        return redirect()->route('contract.avp-show', $contract->id );
-
+    
+        return redirect()->route('contract.avp-show', $contract->id);
     }
 
-  
+    // dd($vendor);
+    // $approvals = HistoryApproval::create([
+    //     'contractvendor_id' => $contract->id,
+    //     'user_id' => Auth()->id(),
+    //     'status_id' => $request->status_id,
+    //     'notes' => $request->notes,
+    // ]);
 
+    // if($price1 = ContractVendor::where('contract_price','>=','500000000.00')->first())
+    // {
+    //     $contractvendor = ContractVendor::where('contract_id', $contract->id)
+    //     ->update([
+    //     'status_id' => 12,
+    // ]); 
+    //     $this->storeReviewSVP($request, $price1);
+    // }else{
+    //     $contract->update([
+    //         'status_id' => 14,
+    // ]); 
+
+    // }
+
+    // // dd($approvals);
+    // // dd($reviews,$contractvendor);
+    // return redirect()->route('contract.svp-show', $contract->id );
     // contract vp
-    public function getVpContract(){
+    public function getVpContract()
+    {
         $user_id = Auth::id();
         $contracts = ContractVendor::where('status_id', 8)->get();
 
-        return view('auth.contract.approval.vp.index', compact('user_id','contracts'));
+        return view('auth.contract.approval.vp.index', compact('user_id', 'contracts'));
     }
 
     public function showVP(Contract $contract)
@@ -236,36 +287,32 @@ class ContractController extends Controller
             'notes' => $request->notes,
         ]);
 
-
-    
-        if($price1 = ContractVendor::where('contract_price','>','100000000.00')->where('contract_price','<','500000000.00')->first())
-        {
+        if ($price1 = ContractVendor::where('contract_price', '>', '100000000.00')->where('contract_price', '<', '500000000.00')->first()) {
             $contractvendor = ContractVendor::where('contract_id', $contractvendor->id)
-            ->update([
-            'status_id' => $request->status_id,
-        ]); 
+                ->update([
+                    'status_id' => 10,
+                ]);
             $this->storeReviewSVP($request, $price1);
-        }else{
+        } else {
             $contractvendor->update([
                 'status_id' => 14,
-        ]); 
-
+            ]);
         }
 
         // dd($approvals);
         // dd($reviews,$contractvendor);
-        return redirect()->route('contract.vp-show', $contractvendor->id );
-
+        return redirect()->route('contract.vp-show', $contractvendor->id);
     }
 
 
-    // Ccontract svp
+    // Contract svp
 
-    public function getSvpContract(){
+    public function getSvpContract()
+    {
         $user_id = Auth::id();
         $contracts = ContractVendor::where('status_id', 10)->get();
 
-        return view('auth.contract.approval.svp.index', compact('user_id','contracts'));
+        return view('auth.contract.approval.svp.index', compact('user_id', 'contracts'));
     }
 
     public function showSVP(Contract $contract)
@@ -285,27 +332,39 @@ class ContractController extends Controller
             'notes' => $request->notes,
         ]);
 
-        if($price1 = ContractVendor::where('contract_price','>=','500000000.00')->first())
-        {
+        if ($price1 = ContractVendor::where('contract_price', '>=', '500000000.00')->first()) {
             $contractvendor = ContractVendor::where('contract_id', $contract->id)
-            ->update([
-            'status_id' => $request->status_id,
-        ]); 
+                ->update([
+                    'status_id' => 12,
+                ]);
             $this->storeReviewSVP($request, $price1);
-        }else{
+        } else {
             $contract->update([
                 'status_id' => 14,
-        ]); 
-
+            ]);
         }
 
         // dd($approvals);
         // dd($reviews,$contractvendor);
-        return redirect()->route('contract.svp-show', $contract->id );
-
+        return redirect()->route('contract.svp-show', $contract->id);
     }
 
     //contract dku
+    public function getDKUContract()
+    {
+        $user_id = Auth::id();
+        $contracts = ContractVendor::where('status_id', 12)->get();
+
+        return view('auth.contract.approval.dku.index', compact('user_id', 'contracts'));
+    }
+
+    public function showDKU(Contract $contract)
+    {
+        $contracts = ContractVendor::find($contract->id);
+
+        return view('auth.contract.approval.dku.show', compact('contracts'));
+    }
+
     public function storeReviewDKU(Request $request, ContractVendor $contract)
     {
         // dd($vendor);
@@ -319,13 +378,12 @@ class ContractController extends Controller
 
         $contractvendor = ContractVendor::where('contract_id', $contract->id)
             ->update([
-            'status_id' => $request->status_id,
-        ]); 
+                'status_id' => $request->status_id,
+            ]);
 
         // dd($approvals);
         // dd($reviews,$contractvendor);
-        return redirect()->route('contract.avp-show', $contract->id );
-
+        return redirect()->route('contract.avp-show', $contract->id);
     }
 
     // contract vendor
@@ -386,10 +444,10 @@ class ContractController extends Controller
 
         $domPdfPath = base_path('vendor/dompdf/dompdf');
         \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF'); 
-        $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('CEK.docx')); 
-        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
-        $PDFWriter->save(public_path('CEK.pdf')); 
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+        $Content = \PhpOffice\PhpWord\IOFactory::load(public_path('CEK.docx'));
+        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+        $PDFWriter->save(public_path('CEK.pdf'));
 
         $user_id = Auth::id();
         $vendor = Vendor::where('user_detail_id', $user_id)->first();
@@ -425,8 +483,8 @@ class ContractController extends Controller
         //avp approval
         // Panggil fungsi lain yang diterima di konstruktor
         // $this->storeReviewAVP($contract);
-        
-        if($price = ContractVendor::where('contract_price','<=', '100.000.000.00')){
+
+        if ($price = ContractVendor::where('contract_price', '<=', '100.000.000.00')) {
 
             //vp approval
             $approvals = HistoryApproval::create([
@@ -438,38 +496,37 @@ class ContractController extends Controller
 
             $contractvendor = ContractVendor::where('contract_id', $contract->id)
                 ->update([
-                'status_id' => 9,
-            ]); 
-                if($price = ContractVendor::where('contract_price','>','100.000.000.00')->where('contract_price','<','500.000.000.00')){
-                    //svp approval
+                    'status_id' => 9,
+                ]);
+            if ($price = ContractVendor::where('contract_price', '>', '100.000.000.00')->where('contract_price', '<', '500.000.000.00')) {
+                //svp approval
+                $approvals = HistoryApproval::create([
+                    'contractvendor_id' => $contract->id,
+                    'user_id' => Auth()->id(),
+                    'status_id' => 11,
+                    'notes' => $request->notes,
+                ]);
+
+                $contractvendor = ContractVendor::where('contract_id', $contract->id)
+                    ->update([
+                        'status_id' => 11,
+                    ]);
+
+                if ($price = ContractVendor::where('contract_price', '>=', '500.000.000.00')) {
+                    //approval dku
                     $approvals = HistoryApproval::create([
                         'contractvendor_id' => $contract->id,
                         'user_id' => Auth()->id(),
-                        'status_id' => 11,
+                        'status_id' => 13,
                         'notes' => $request->notes,
                     ]);
-        
+
                     $contractvendor = ContractVendor::where('contract_id', $contract->id)
                         ->update([
-                        'status_id' => 11,
-                    ]); 
-                    
-                    if($price = ContractVendor::where('contract_price','>=','500.000.000.00')){
-                        //approval dku
-                        $approvals = HistoryApproval::create([
-                            'contractvendor_id' => $contract->id,
-                            'user_id' => Auth()->id(),
                             'status_id' => 13,
-                            'notes' => $request->notes,
                         ]);
-            
-                        $contractvendor = ContractVendor::where('contract_id', $contract->id)
-                            ->update([
-                            'status_id' => 13,
-                        ]); 
                 }
             }
         }
-       
     }
 }

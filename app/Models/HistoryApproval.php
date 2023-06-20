@@ -11,5 +11,5 @@ class HistoryApproval extends Model
 
     protected $table = "history_approval";
 
-    protected $fillable = ['id', 'contractvendor_id', 'user_id', 'status_id', 'notes', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'contract_id', 'user_id', 'status_id','vendor_id','notes', 'created_at', 'updated_at'];
 }

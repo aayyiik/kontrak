@@ -15,13 +15,15 @@ return new class extends Migration
     {
         Schema::create('history_approval', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('contractvendor_id');
+            $table->unsignedBigInteger('contract_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('status_id');
+            $table->unsignedBigInteger('vendor_id');
             $table->text('notes');
-            $table->foreign('contractvendor_id')->references('id')->on('contract_vendor');
+            $table->foreign('contract_id')->references('id')->on('contracts');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('status_id')->references('id')->on('statuses');
+            $table->foreign('vendor_id')->references('id')->on('vendors');
             $table->timestamps();
         });
     }

@@ -52,7 +52,7 @@ Route::post('/contract/{contract}/{vendor}/approval', [ContractController::class
 //AVP
 Route::get('/contract/avp', [ContractController::class, 'getAvpContract'])->name('contract.avp');
 Route::get('/contract/{contract}/avp', [ContractController::class, 'showAVP'])->name('contract.avp-show');
-Route::post('/contract/{contract}/approval/avp', [ContractController::class, 'storeReviewAVP'])->name('contract.avp-approval');
+Route::post('/contract/{contract}/{vendor}/approval/avp', [ContractController::class, 'storeReviewAVP'])->name('contract.avp-approval');
 // Route::post('/contract/{contract}/approval/avp', [ContractController::class, 'filterByPrice'])->name('contract.avp-approval');
 
 //VP
@@ -64,4 +64,9 @@ Route::post('/contract/{contract}/approval/vp', [ContractController::class, 'sto
 Route::get('/contract/svp', [ContractController::class, 'getSvpContract'])->name('contract.svp');
 Route::get('/contract/{contract}/svp', [ContractController::class, 'showSVP'])->name('contract.svp-show');
 Route::post('/contract/{contract}/approval/svp', [ContractController::class, 'storeReviewSVP'])->name('contract.svp-approval');
+
+//DKU
+Route::get('/contract/dku', [ContractController::class, 'getDKUContract'])->name('contract.dku');
+Route::get('/contract/{contract}/dku', [ContractController::class, 'showDKU'])->name('contract.dku-show');
+Route::post('/contract/{contract}/approval/dku', [ContractController::class, 'storeReviewDKU'])->name('contract.dku-approval');
 
